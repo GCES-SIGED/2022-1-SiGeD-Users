@@ -20,13 +20,30 @@ const access = async (req, res) => {
 };
 
 const signUpGet = async (req, res) => {
-  const users = await User.find({ open: true });
-  console.log(users);
+  const {
+    page, limit, filters, sort,
+  } = req.query;
+  const orderBy = {};
+  let mongoQuery = {};
+
+  const pageNumber = parseInt(page, 10) || 0;
+  const limitNumber = parseInt(limit, 10) || 10;
+
+  if (sort) orderBy[sort] = 1;
+
+  if (filters) {
+    mongoQuery = JSON.parse(filters) || {};
+    mongoQuery.name = { $regex: mongoQuery.name || '', $options: 'i' };
+    mongoQuery.email = { $regex: mongoQuery.email || '', $options: 'i' };
+  }
+
+  const users = await User.find(mongoQuery)
+    .skip(pageNumber * limitNumber)
+    .limit(limitNumber)
+    .sort(orderBy)
+    .exec();
+
   return res.status(200).json(users);
-
-  /*const users = await User.find();
-
-  return res.status(200).json(users);*/
 };
 
 const signUpPost = async (req, res) => {
@@ -125,12 +142,12 @@ const toggleUser = async (req, res) => {
     return res.status(400).json({ err: 'Invalid ID' });
   }
 
-  /*try {
+  /* try {
     await User.deleteOne({ _id: id });
     return res.json({ message: 'User has been deleted' });
   } catch (error) {
     return res.status(404).json({ error: 'It was not possible to find an user with this id.' });
-  }*/
+  } */
 };
 
 const login = async (req, res) => {

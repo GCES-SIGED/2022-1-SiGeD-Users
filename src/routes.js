@@ -8,7 +8,7 @@ const { verifyJWT } = require('./Utils/functionsJWT');
 
 routes.get('/users/newest-four', verify.verifyJWT, UserController.newestFourUsersGet);
 routes.get('/users/:id', verifyJWT, UserController.access);
-routes.get('/users', verify.verifyJWT, UserController.signUpGet);
+routes.get('/users', UserController.signUpGet);
 routes.post('/signup', UserController.signUpPost);
 routes.post('/login', UserController.login);
 routes.post('/recover-password', UserController.recoverPassword);
