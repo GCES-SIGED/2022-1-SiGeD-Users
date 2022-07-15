@@ -3,17 +3,18 @@ const verify = require('./Utils/functionsJWT');
 
 const routes = express.Router();
 
-const UserController = require('./Controllers/UserController');
+const ctrl = require('./Controllers/UserController');
 const { verifyJWT } = require('./Utils/functionsJWT');
 
-routes.get('/users/newest-four', verify.verifyJWT, UserController.newestFourUsersGet);
-routes.get('/users/:id', verifyJWT, UserController.access);
-routes.get('/users', UserController.signUpGet);
-routes.post('/signup', UserController.signUpPost);
-routes.post('/login', UserController.login);
-routes.post('/recover-password', UserController.recoverPassword);
-routes.put('/change-password/:id', verify.verifyJWT, UserController.changePassword);
-routes.put('/users/update/:id', verify.verifyJWT, UserController.signUpPut);
-routes.delete('/users/delete/:id', verify.verifyJWT, UserController.toggleUser);
+routes.post('/signup', ctrl.signUp);
+routes.get('/users', ctrl.getUsers);
+routes.post('/login', ctrl.login);
+routes.post('/recover-password', ctrl.recoverPassword);
+routes.put('/change-password/:id', verify.verifyJWT, ctrl.changePassword);
+
+routes.get('/users/newest-four', verify.verifyJWT, ctrl.newestFourUsersGet);
+routes.get('/users/:id', verifyJWT, ctrl.getUserByid);
+routes.put('/users/update/:id', verify.verifyJWT, ctrl.updateUser);
+routes.delete('/users/delete/:id', verify.verifyJWT, ctrl.toggleUser);
 
 module.exports = routes;
