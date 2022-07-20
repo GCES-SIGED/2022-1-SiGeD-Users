@@ -185,6 +185,30 @@ describe('Sample Test', () => {
     done();  
   });
 
+  it('Get users sorted', async (done) => {
+    const sortDesc = {
+      sort: {
+        name: -1,
+      },
+    }
+
+    const res = await request(app).get(`/users`).set('x-access-token', token).query(sortDesc);  
+    expect(res.statusCode).toBe(200);  
+    expect(res.body[0].email).toBe(user1.email);
+
+    const sortAsc = {
+      sort: {
+        name: 1,
+      },
+    }
+
+    const newRes = await request(app).get(`/users`).set('x-access-token', token).query(sortAsc);  
+    expect(newRes.statusCode).toBe(200);  
+    expect(newRes.body[0].email).toBe("jacquin2@gmail.com");  
+
+    done();
+  });
+
   it('Get user error', async (done) => {
     const res = await request(app).get('/users/12345678912345678912345').set('x-access-token', token);
     expect(res.statusCode).toBe(400);
