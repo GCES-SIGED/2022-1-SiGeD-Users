@@ -164,6 +164,27 @@ describe('Sample Test', () => {
     done();  
   }); 
 
+  it('Get users filtered', async (done) => {  
+    const filterName = {  
+      filters:   {  
+        name : 'Usuario Um',  
+      },  
+    };  
+    const res = await request(app).get(`/users`).set('x-access-token', token).query(filterName);  
+    expect(res.statusCode).toBe(200);  
+    expect(res.body[0].name).toBe(user1.name);  
+  
+    const filterEmail = {  
+      filters:   {  
+        email : 'um@gmail.com',  
+      },  
+    };  
+    const nextRes = await request(app).get(`/users`).set('x-access-token', token).query(filterEmail);  
+    expect(nextRes.statusCode).toBe(200);  
+    expect(nextRes.body[0].email).toBe(user1.email);  
+    done();  
+  });
+
   it('Get user error', async (done) => {
     const res = await request(app).get('/users/12345678912345678912345').set('x-access-token', token);
     expect(res.statusCode).toBe(400);
