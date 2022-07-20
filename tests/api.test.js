@@ -130,6 +130,40 @@ describe('Sample Test', () => {
     done();
   });
 
+  it('Get users paginate', async (done) => {  
+    const pagination = {  
+      page:   0,   
+      limit:  3,  
+    };  
+    const res = await request(app).get(`/users`).set('x-access-token', token).query(pagination);  
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(pagination.limit);
+    expect(res.body[0].name).toBe(user1.name);
+    expect(res.body[0].email).toBe(user1.email);
+    expect(res.body[0].role).toBe(user1.role);
+    expect(res.body[0].sector).toBe(user1.sector);
+    expect(res.body[res.body.length - 1].name).toBe(user4.name);
+    expect(res.body[res.body.length - 1].email).toBe(user4.email);
+    expect(res.body[res.body.length - 1].role).toBe(user4.role);
+    expect(res.body[res.body.length - 1].sector).toBe(user4.sector);
+    const nextPagination = {  
+      page:   1,   
+      limit:  3,  
+    };  
+    const nextRes = await request(app).get(`/users`).set('x-access-token', token).query(nextPagination);  
+    expect(nextRes.statusCode).toBe(200);
+    expect(nextRes.body.length).toBe(nextPagination.limit-1);  
+    expect(nextRes.body[0].name).toBe(user5.name);
+    expect(nextRes.body[0].email).toBe(user5.email);
+    expect(nextRes.body[0].role).toBe(user5.role);
+    expect(nextRes.body[0].sector).toBe(user5.sector);
+    expect(nextRes.body[nextRes.body.length - 1].name).toBe("Jacquin Junior");
+    expect(nextRes.body[nextRes.body.length - 1].email).toBe("jacquin2@gmail.com");
+    expect(nextRes.body[nextRes.body.length - 1].role).toBe("admin");
+    expect(nextRes.body[nextRes.body.length - 1].sector).toBe("60660af3786b3c00470115c9");
+    done();  
+  }); 
+
   it('Get user error', async (done) => {
     const res = await request(app).get('/users/12345678912345678912345').set('x-access-token', token);
     expect(res.statusCode).toBe(400);
