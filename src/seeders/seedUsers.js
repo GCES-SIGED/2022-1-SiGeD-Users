@@ -44,6 +44,7 @@ db.once("open", () => {
 const usersLength = users.length;
 
 users.forEach(async (user, index) => {
+<<<<<<< HEAD
   await user.save((err, result) => {
     try {
       if (err) throw new Error(`${err?.message}`);
@@ -57,4 +58,18 @@ users.forEach(async (user, index) => {
       process.exit(0);
     }
   });
+=======
+  try {
+    await user.save();
+    if (index === usersLength - 1) {
+      console.log("DONE!");
+      db.close();
+    }
+  } catch(error) {
+    const err = new Error(`${error?.message}`);
+    console.log(`User seed failed - ${err}`);
+    db.close();
+    process.exit(0);
+  }
+>>>>>>> a346fc8fba737c0fbf02af242f0c6927877dc82a
 });
