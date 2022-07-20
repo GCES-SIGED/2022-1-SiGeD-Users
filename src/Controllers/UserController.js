@@ -28,10 +28,13 @@ const apiUsers = {
     const pageNumber = parseInt(page, 10) || 0;
     const limitNumber = parseInt(limit, 10) || 10;
 
-    if (sort) orderBy[sort] = 1;
+    if (sort) {
+      let sortObj = typeof sort === 'string' ? JSON.parse(sort) : sort || {};
+      Object.keys(sortObj).forEach(key => orderBy[key] = parseInt(sortObj[key]))
+    }
 
     if (filters) {
-      mongoQuery = JSON.parse(filters) || {};
+      mongoQuery = typeof filters === 'string' ? JSON.parse(filters) : filters || {};
       mongoQuery.name = { $regex: mongoQuery.name || '', $options: 'i' };
       mongoQuery.email = { $regex: mongoQuery.email || '', $options: 'i' };
     }
