@@ -29,8 +29,8 @@ const apiUsers = {
     const limitNumber = parseInt(limit, 10) || 10;
 
     if (sort) {
-      let sortObj = typeof sort === 'string' ? JSON.parse(sort) : sort || {};
-      Object.keys(sortObj).forEach(key => orderBy[key] = parseInt(sortObj[key]))
+      const sortObj = typeof sort === 'string' ? JSON.parse(sort) : sort || {};
+      Object.keys(sortObj).forEach((key) => orderBy[key] = parseInt(sortObj[key]));
     }
 
     if (filters) {
